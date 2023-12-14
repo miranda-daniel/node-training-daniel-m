@@ -5,4 +5,4 @@ const usersRouter = Router();
 
 usersRouter.get('/', getAllUsers);
 
-module.exports = usersRouter;
+export { usersRouter };
