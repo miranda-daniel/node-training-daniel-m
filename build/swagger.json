@@ -15,18 +15,18 @@
 					"email": {
 						"type": "string"
 					},
-					"firstname": {
+					"firstName": {
 						"type": "string"
 					},
-					"lastname": {
+					"lastName": {
 						"type": "string"
 					}
 				},
 				"required": [
 					"id",
 					"email",
-					"firstname",
-					"lastname"
+					"firstName",
+					"lastName"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -34,12 +34,15 @@
 		},
 		"securitySchemes": {}
 	},
-	"openapi": "3.0.0",
 	"info": {
 		"title": "node-project",
 		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
 		"contact": {}
 	},
+	"openapi": "3.0.0",
 	"paths": {
 		"/users": {
 			"get": {

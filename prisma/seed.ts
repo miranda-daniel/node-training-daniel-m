@@ -25,13 +25,13 @@ const seed = async () => {
         const email = faker.internet.email();
 
         await prisma.user.upsert({
-          where: { email: email },
+          where: { email },
           update: {},
           create: {
             email,
             password: hashedPassword,
-            firstname: faker.person.firstName(),
-            lastname: faker.person.lastName(),
+            firstName: faker.person.firstName(),
+            lastName: faker.person.lastName(),
           },
         });
       }

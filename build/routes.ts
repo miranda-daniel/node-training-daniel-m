@@ -14,8 +14,8 @@ const models: TsoaRoute.Models = {
         "properties": {
             "id": {"dataType":"double","required":true},
             "email": {"dataType":"string","required":true},
-            "firstname": {"dataType":"string","required":true},
-            "lastname": {"dataType":"string","required":true},
+            "firstName": {"dataType":"string","required":true},
+            "lastName": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
