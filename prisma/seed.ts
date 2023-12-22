@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
-
-const prisma = new PrismaClient();
+import { db } from './db';
 
 faker.seed(1);
 const SALT_ROUNDS = 10;
@@ -20,7 +18,7 @@ const seed = async () => {
   try {
     const hashedPassword = await hashPassword(DEFAULT_PASSWORD);
 
-    await prisma.$transaction(async (prisma) => {
+    await db.$transaction(async (prisma) => {
       for (let i = 0; i < DEFAULT_USERS_AMOUNT; i++) {
         const email = faker.internet.email();
 
@@ -41,7 +39,7 @@ const seed = async () => {
   } catch (error) {
     console.error('Error creating users:', error);
   } finally {
-    await prisma.$disconnect();
+    await db.$disconnect();
   }
 }
 

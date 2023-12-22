@@ -1,10 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { db } from '../../prisma/db';
 import { UserType } from '../types/user';
 
-const prisma = new PrismaClient();
-
-export const getUsers = async () => {
-  const users = await prisma.user.findMany();
+export const getUsersService = async () => {
+  const users = await db.user.findMany();
 
   const usersMapped: UserType[] = users.map((user) => {
     const { id, firstName, lastName, email } = user;

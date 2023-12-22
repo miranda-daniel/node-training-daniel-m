@@ -1,9 +1,9 @@
 import { Controller, Get, Route } from 'tsoa';
-import { getUsers } from '../services/user.services';
+import { getUsersService } from '../services/user.services';
 import { UserType } from '../types/user';
 
 @Route('users')
-export class UsersController extends Controller {
+export class UserController extends Controller {
   /**
    * Get all users.
    * @summary Get a list of all users.
@@ -11,7 +11,7 @@ export class UsersController extends Controller {
    */
   @Get('/')
   public async getAllUsers(): Promise<UserType[]> {
-    const usersResponse = await getUsers();
+    const usersResponse = await getUsersService();
     return usersResponse;
   }
 }
