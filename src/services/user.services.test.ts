@@ -1,4 +1,4 @@
-import { getUsersService } from './user.services';
+import { UserService } from './user.services';
 import { db } from '../../prisma/db';
 
 jest.mock('../../prisma/db', () => ({
@@ -13,7 +13,7 @@ describe('UserService', () => {
   it('should return an empty array when there are no users', async () => {
     (db.user.findMany as jest.Mock).mockResolvedValueOnce([]);
 
-    const result = await getUsersService();
+    const result = await UserService.getUsersService();
     expect(result).toEqual([]);
   });
 
@@ -25,7 +25,7 @@ describe('UserService', () => {
 
     (db.user.findMany as jest.Mock).mockResolvedValueOnce(mockUsersDb);
   
-    const result = await getUsersService();
+    const result = await UserService.getUsersService();
   
     const expectedMappedUsers = mockUsersDb.map(({ id, firstName, lastName, email }) => ({ id, firstName, lastName, email }));
     expect(result).toEqual(expectedMappedUsers);

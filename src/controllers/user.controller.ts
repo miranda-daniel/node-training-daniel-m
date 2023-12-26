@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Route, Security } from 'tsoa';
-import { getUsersService, loginUser, registerUserService } from '../services/user.services';
 import { LoginUserRequestType, RegisterUserRequestType, UserType } from '../types/user';
 import { SessionType } from '../types/session';
+import { UserService } from '../services/user.services';
 import { loginValidations } from '../helpers/validations/login.validations';
 import { registerValidations } from '../helpers/validations/register.validations';
 
@@ -23,7 +23,7 @@ export class UserController extends Controller {
       }
     }
 
-    const session = await registerUserService(requestBody);
+    const session = await UserService.registerUserService(requestBody);
     return session;
   }
 
@@ -43,7 +43,7 @@ export class UserController extends Controller {
       }
     }
 
-    const session = await loginUser(body);
+    const session = await UserService.loginUser(body);
     return session;
   }
 
@@ -55,7 +55,7 @@ export class UserController extends Controller {
   @Get('/')
   @Security('jwt')
   public async getAllUsers(): Promise<UserType[]> {
-    const usersResponse = await getUsersService();
+    const usersResponse = await UserService.getUsersService();
     return usersResponse;
   }
 }
