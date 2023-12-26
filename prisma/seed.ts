@@ -1,18 +1,10 @@
-import * as bcrypt from 'bcrypt';
 import { faker } from '@faker-js/faker';
+import { hashPassword } from '../src/helpers/utils';
 import { db } from './db';
 
 faker.seed(1);
-const SALT_ROUNDS = 10;
-
 const DEFAULT_PASSWORD = 'Password1';
 const DEFAULT_USERS_AMOUNT = 5;
-
-const hashPassword = async (password: string): Promise<string> => {
-  const salt = await bcrypt.genSalt(SALT_ROUNDS);
-
-  return bcrypt.hash(password, salt);
-}
 
 const seed = async () => {
   try {
