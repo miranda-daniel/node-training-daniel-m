@@ -1,5 +1,5 @@
 import { Body, Get, Security, Controller, Post, Route } from 'tsoa';
-import { RegisterUserRequest, User } from '../types/user';
+import { RegisterUserRequest, User, UserIndex } from '../types/user';
 import { UserService } from '../services/user.services';
 import { registerValidations } from '../helpers/validations/register.validations';
 import { ErrorMessage } from '../types/session';
@@ -23,13 +23,13 @@ export class UserController extends Controller {
   }
 
   /**
-   *  Get all users.
+   *  Index - Get all users.
    * @summary Get a list of all users.
    * @returns {User[]} 200 - List of users
    */
   @Get('/')
   @Security('jwt')
-  public async getAllUsers(): Promise<User[]> {
+  public async getAllUsers(): Promise<UserIndex[]> {
     return await UserService.getUsersService();
   }
 }
