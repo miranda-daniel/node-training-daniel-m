@@ -1,8 +1,8 @@
 import validator from 'validator';
-import { RegisterUserRequestType } from '../../types/user';
+import { RegisterUserRequest } from '../../types/user';
 import { ErrorMessage } from '../../types/session';
 
-export const registerValidations = (request: RegisterUserRequestType): ErrorMessage[] => {
+export const registerValidations = (request: RegisterUserRequest): ErrorMessage[] => {
   const errors: ErrorMessage[] = [];
 
   const { email, password, firstName, lastName } = request;
