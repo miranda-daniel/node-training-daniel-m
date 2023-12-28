@@ -14,8 +14,8 @@ model User {
   id        Int    @id @default(autoincrement())
   email     String @unique
   password  String
-  firstname String
-  lastname  String
+  firstName String
+  lastName  String
 }
 
 // push changes to database: 
