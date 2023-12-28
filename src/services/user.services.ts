@@ -2,8 +2,7 @@ import { db } from '../../prisma/db';
 import { ApiError } from '../config/apiError';
 import { errors } from '../config/errors';
 import { hashPassword } from '../helpers/utils';
-import { UsersView } from '../serializers/enums';
-import { UserSerializer } from '../serializers/user.seralizer';
+import { UserSerializer } from '../serializers/user-seralizer';
 import { RegisterUserRequest, User, UserRaw } from '../types/user';
 
 export class UserService {
@@ -11,7 +10,7 @@ export class UserService {
     try {
       const usersListRaw = await db.user.findMany();
 
-      return  usersListRaw.map((user: UserRaw) => UserSerializer.deSerialize(user, UsersView.UsersIndex));
+      return UserSerializer.serializeUserListIndex(usersListRaw);
     } catch (err) {
       throw new ApiError(errors.INTERNAL_SERVER_ERROR);
     }
@@ -34,7 +33,7 @@ export class UserService {
         },
       });
 
-      return UserSerializer.deSerialize(userCreated) as User;
+      return UserSerializer.serialize(userCreated) as User;
     } catch (err) {
       throw new ApiError(errors.USER_ALREADY_EXISTS);
     }
