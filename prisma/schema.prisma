@@ -16,9 +16,13 @@ model User {
   password  String
   firstName String
   lastName  String
+  products  Product[]
 }
 
-// push changes to database: 
-// npx prisma migrate dev
-
-// database UI: npx prisma studio
+model Product {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  userId      Int
+  user        User   @relation(fields: [userId], references: [id])
+}

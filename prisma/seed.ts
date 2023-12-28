@@ -5,6 +5,7 @@ import { db } from './db';
 faker.seed(1);
 const DEFAULT_PASSWORD = 'Password1';
 const DEFAULT_USERS_AMOUNT = 5;
+const PRODUCTS_PER_USER = 3;
 
 const seed = async () => {
   try {
@@ -14,7 +15,7 @@ const seed = async () => {
       for (let i = 0; i < DEFAULT_USERS_AMOUNT; i++) {
         const email = faker.internet.email();
 
-        await prisma.user.upsert({
+        const user = await prisma.user.upsert({
           where: { email },
           update: {},
           create: {
@@ -24,6 +25,16 @@ const seed = async () => {
             lastName: faker.person.lastName(),
           },
         });
+
+        for (let j = 0; j < PRODUCTS_PER_USER; j++) {
+          await prisma.product.create({
+            data: {
+              title: faker.commerce.productName(),
+              description: faker.commerce.productDescription(),
+              userId: user.id,
+            },
+          });
+        }
       }
     });
 
