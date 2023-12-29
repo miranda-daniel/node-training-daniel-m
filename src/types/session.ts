@@ -15,3 +15,9 @@ export interface ErrorMessage {
 export interface TokenPayload {
   userId: number;
 }
+
+export interface Context extends TokenPayload {
+  user: TokenPayload & {
+    token: string;
+  };
+}
