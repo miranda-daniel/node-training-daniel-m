@@ -4,9 +4,10 @@ import { Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { ApiError } from '../config/apiError';
 import { errors } from '../config/errors';
+import { ENV_VARIABLES } from '../config/config';
 
 export function expressAuthentication(request: Request, securityName: string, scopes?: string[]): Promise<any> {
-  const jsonSignature = process.env.JSON_SIGNATURE!;
+  const jsonSignature = ENV_VARIABLES.jsonSignature;
 
   if (securityName === 'jwt') {
     const token = request.headers.authorization!;
