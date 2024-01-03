@@ -6,9 +6,9 @@ enum UsersView {
 
 class UserSerializer {
   static serializeUserListIndex = (userListRaw: UserRaw[]) =>
-    userListRaw.map((user: UserRaw) => UserSerializer.serialize(user, UsersView.UsersIndex));
+  userListRaw.map((user: UserRaw) => UserSerializer.serialize(user, UsersView.UsersIndex));
 
-  static serialize = (userObject: UserRaw, view?: string): UserIndex | User => {
+  static serialize = (userObject: UserRaw, view?: string): object => {
     switch (view) {
       case UsersView.UsersIndex:
         return this.serializeUserIndex(userObject);
@@ -17,12 +17,12 @@ class UserSerializer {
     }
   };
 
-  private static serializeUserIndex = (userRaw: UserRaw): UserIndex => ({
+  static serializeUserIndex = (userRaw: UserRaw | UserIndex): UserIndex => ({
     firstName: userRaw.firstName,
     lastName: userRaw.lastName,
   });
 
-  private static serializeUser = (userRaw: UserRaw): User => ({
+  static serializeUser = (userRaw: UserRaw): User => ({
     id: userRaw.id,
     email: userRaw.email,
     firstName: userRaw.firstName,

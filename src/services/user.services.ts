@@ -3,14 +3,14 @@ import { ApiError } from '../config/apiError';
 import { errors } from '../config/errors';
 import { hashPassword } from '../helpers/utils';
 import { UserSerializer } from '../serializers/user-seralizer';
-import { RegisterUserRequest, User, UserRaw } from '../types/user';
+import { RegisterUserRequest, User, UserIndex, UserRaw } from '../types/user';
 
 export class UserService {
   static getUsersService = async () => {
     try {
       const usersListRaw = await db.user.findMany();
 
-      return UserSerializer.serializeUserListIndex(usersListRaw);
+      return UserSerializer.serializeUserListIndex(usersListRaw) as UserIndex[];
     } catch (err) {
       throw new ApiError(errors.INTERNAL_SERVER_ERROR);
     }
