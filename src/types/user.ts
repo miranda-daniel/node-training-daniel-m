@@ -1,18 +1,24 @@
-export interface UserBaseType {
+export interface UserIndex {
+  firstName: string;
+  lastName: string;
+}
+
+export interface User {
+  id: number;
   email: string;
   firstName: string;
   lastName: string;
 }
 
-export interface UserType extends UserBaseType {
-  id: number;
-}
-
-export interface RegisterUserRequestType extends Omit<UserBaseType, 'id'> {
+export interface LoginUserRequest {
+  email: string;
   password: string;
 }
 
-export interface LoginUserRequestType {
-  email: string;
+export interface RegisterUserRequest extends Omit<User, 'id'> {
+  password: string;
+}
+
+export interface UserRaw extends User {
   password: string;
 }

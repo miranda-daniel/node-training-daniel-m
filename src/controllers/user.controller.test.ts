@@ -1,6 +1,8 @@
 import { UserController } from './user.controller'; 
 import { UserService } from '../services/user.services'; 
-import { UserType } from '../types/user';
+import { User } from '../types/user';
+
+// TODO; unit tests pending 
 
 jest.mock('../services/user.services', () => ({
   getUsersService: jest.fn(),
@@ -16,7 +18,7 @@ describe('User Controller', () => {
   });
 
   it('should return an array of users', async () => {
-    const mockUsers: UserType[] = [
+    const mockUsers: User[] = [
       { id: 1, firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com' },
     ];
 

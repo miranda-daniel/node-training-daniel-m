@@ -1,8 +1,17 @@
+export interface LoginUserRequest {
+  email: string;
+  password: string;
+}
+
+export interface Session {
+  errors: ErrorMessage[];
+  token: string | null;
+}
+
 export interface ErrorMessage {
   message: string;
 }
 
-export interface SessionType {
-  errors: ErrorMessage[];
-  token: string | null;
+export interface TokenPayload {
+  userId: number;
 }
