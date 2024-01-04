@@ -1,34 +1,36 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { ApiError } from '../config/apiError';
 import { errors } from '../config/errors';
+import { ENV_VARIABLES } from '../config/config';
+import { TokenPayload } from '../types/session';
 
-export function expressAuthentication(request: Request, securityName: string, scopes?: string[]): Promise<any> {
-  const jsonSignature = process.env.JSON_SIGNATURE!;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function expressAuthentication(request: Request, securityName: string, scopes?: string[]) {
+  const jsonSignature = ENV_VARIABLES.jsonSignature;
 
   if (securityName === 'jwt') {
     const token = request.headers.authorization!;
 
-    return new Promise((resolve, reject) => {
-      if (!token) {
-        reject(new ApiError(errors.UNAUTHENTICATED));
+    if (!token) {
+      throw new ApiError(errors.UNAUTHENTICATED);
+    }
+
+    try {
+      const payloadDecoded = jwt.verify(token, jsonSignature) as TokenPayload;
+
+      return {
+        ...payloadDecoded,
+        token,
+      };
+    } catch (err) {
+      if (err instanceof jwt.TokenExpiredError) {
+        throw new ApiError(errors.EXPIRED_TOKEN);
+      } else {
+        throw new ApiError(errors.INVALID_TOKEN);
       }
-      jwt.verify(token, jsonSignature, (err: any, decoded: any) => {
-        if (err) {
-          if (err instanceof jwt.TokenExpiredError) {
-            reject(new ApiError(errors.EXPIRED_TOKEN));
-          } else {
-            reject(new ApiError(errors.INVALID_TOKEN));
-          }
-        }
-        resolve({
-          ...decoded.user,
-          token,
-        });
-      });
-    });
+    }
   }
-  return Promise.resolve(null);
+
+  return null;
 }
