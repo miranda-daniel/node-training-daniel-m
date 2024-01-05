@@ -3,9 +3,10 @@ import { ApiError } from '../config/apiError';
 import { UserService } from './user.services';
 import { createUser } from '../test/utils';
 import { UserSerializer } from '../serializers/user-seralizer';
-import { UserIndex } from '../types/user';
+import { User, UserIndex } from '../types/user';
 import { errors } from '../config/errors';
-import { userRandomRaw } from '../test/test-constants';
+import { registerUserRandom, userRandomRaw } from '../test/test-constants';
+import * as utils from '../helpers/utils';
 
 describe('UserService - Get Users', () => {
   beforeEach(async () => await createUser({ email: 'test1@gmail.com' }));
@@ -53,5 +54,74 @@ describe('UserService - Get Users', () => {
         fail('Must be an ApiError');
       }
     }
+  });
+});
+
+describe('UserService - Register User', () => {
+  const defaultEmail = 'test1@gmail.com';
+  const newUserRequest = { ...registerUserRandom, email: defaultEmail};
+
+  beforeEach(async () => {
+    jest.clearAllMocks();
+
+    try {
+      await db.user.delete({
+        where: { email: defaultEmail },
+      });
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('should call hashPassword once with the correct argument', async () => {
+    jest.spyOn(utils, 'hashPassword').mockResolvedValue('hashedPasswordMock');
+
+    await UserService.registerUserService(newUserRequest);
+
+    expect(utils.hashPassword).toHaveBeenCalledTimes(1);
+    expect(utils.hashPassword).toHaveBeenCalledWith(registerUserRandom.password);
+  });
+
+  it('should call db.user.create with correct parameters', async () => {
+    const hashedPassword = 'hashedPasswordMock';
+
+    jest.spyOn(utils, 'hashPassword').mockResolvedValue(hashedPassword);
+
+    const createSpy = jest.spyOn(db.user, 'create').mockResolvedValue({ ...userRandomRaw, password: hashedPassword });
+
+    await UserService.registerUserService(newUserRequest);
+
+    expect(createSpy).toHaveBeenCalledWith({
+      data: {
+        firstName: registerUserRandom.firstName,
+        lastName: registerUserRandom.lastName,
+        email: defaultEmail,
+        password: hashedPassword,
+      },
+    });
+  });
+
+  it('should serialize user created', async () => {
+    jest.spyOn(db.user, 'create').mockResolvedValue(userRandomRaw);
+
+    const usersSerialized: User = {
+      id: userRandomRaw.id,
+      email: userRandomRaw.email,
+      firstName: userRandomRaw.firstName,
+      lastName: userRandomRaw.lastName,
+    };
+
+    expect(usersSerialized).toEqual(UserSerializer.serialize(userRandomRaw));
+  });
+
+  it('should throw an ApiError USER_ALREADY_EXISTS on database error', async () => {
+    jest.spyOn(db.user, 'create').mockRejectedValue(new Error('Database error'));
+
+    await expect(UserService.registerUserService(newUserRequest)).rejects.toThrow(
+      new ApiError(errors.USER_ALREADY_EXISTS),
+    );
   });
 });
