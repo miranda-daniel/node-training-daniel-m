@@ -13,27 +13,27 @@ export class SessionService {
 
     const { email, password } = credentials;
 
-    try {
-      const user = await db.user.findUnique({
-        where: {
-          email,
-        },
-      });
+    const user = await db.user.findUnique({
+      where: {
+        email,
+      },
+    });
 
-      const isMatch = await comparePasswords(password, user!.password);
-
-      if (!isMatch) {
-        throw new ApiError(errors.INVALID_CREDENTIALS);
-      }
-
-      const tokenCreated = JWT.sign({ userId: user!.id }, jsonSignature!, { expiresIn: 3600000 });
-
-      return {
-        errors: [],
-        token: tokenCreated,
-      };
-    } catch (err) {
+    if (!user) {
       throw new ApiError(errors.INVALID_USER);
     }
+
+    const isMatch = await comparePasswords(password, user!.password);
+
+    if (!isMatch) {
+      throw new ApiError(errors.INVALID_CREDENTIALS);
+    }
+
+    const tokenCreated = JWT.sign({ userId: user!.id }, jsonSignature!, { expiresIn: 3600000 });
+
+    return {
+      errors: [],
+      token: tokenCreated,
+    };
   };
 }

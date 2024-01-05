@@ -1,8 +1,9 @@
 import { Body, Controller, Post, Route } from 'tsoa';
 import { LoginUserRequest } from '../types/session';
-import { Session } from '../types/session';
 import { loginValidations } from '../helpers/validations/login.validations';
 import { SessionService } from '../services/session.services';
+import { ApiError } from '../config/apiError';
+import { errors } from '../config/errors';
 
 @Route('session')
 export class SessionController extends Controller {
@@ -12,7 +13,7 @@ export class SessionController extends Controller {
    * @returns {Session} 200 - Token
    */
   @Post('/login')
-  public async login(@Body() body: LoginUserRequest): Promise<Session> {
+  public async login(@Body() body: LoginUserRequest) {
     const errorsList = loginValidations(body);
 
     if (errorsList.length) {
@@ -22,6 +23,15 @@ export class SessionController extends Controller {
       };
     }
 
-    return await SessionService.loginUser(body);
+    try {
+      return await SessionService.loginUser(body);
+    } catch (err) {
+      // TODO: see how create a middleware to handle unexpected errors to avoid coding this if everywhere.
+      if (err instanceof ApiError) {
+        throw err;
+      } else {
+        throw new ApiError(errors.INTERNAL_SERVER_ERROR);
+      }
+    }
   }
 }
