@@ -22,3 +22,5 @@ export interface RegisterUserRequest extends Omit<User, 'id'> {
 export interface UserRaw extends User {
   password: string;
 }
+
+export interface PartialUser extends Partial<RegisterUserRequest> {}
