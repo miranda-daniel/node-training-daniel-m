@@ -1,5 +1,6 @@
 import { db } from '../../prisma/db';
 import { ApiError } from '../config/apiError';
+import { ENV_VARIABLES } from '../config/config';
 import { errors } from '../config/errors';
 import { comparePasswords } from '../helpers/utils';
 import { Session } from '../types/session';
@@ -8,7 +9,7 @@ import JWT from 'jsonwebtoken';
 
 export class SessionService {
   static loginUser = async (credentials: LoginUserRequest): Promise<Session> => {
-    const jsonSignature = process.env.JSON_SIGNATURE;
+    const jsonSignature = ENV_VARIABLES.jsonSignature;
 
     const { email, password } = credentials;
 

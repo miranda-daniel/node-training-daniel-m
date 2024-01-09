@@ -1,8 +1,7 @@
-import { Body, Controller, Delete, Get, Header, Path, Post, Put, Route, Security } from 'tsoa';
+import { Body, Controller, Delete, Get, Request, Path, Post, Put, Route, Security } from 'tsoa';
 import { ProductService } from '../services/product.services';
 import { CreateProductRequest, Product, ProductIndex, UpdateProductRequest } from '../types/product';
-import jwt from 'jsonwebtoken';
-import { TokenPayload } from '../types/session';
+import { Context } from '../types/session';
 
 @Route('products')
 export class ProductController extends Controller {
@@ -26,12 +25,12 @@ export class ProductController extends Controller {
   @Post('/create')
   @Security('jwt')
   public async createProduct(
-    @Header('Authorization') authorizationToken: string,
+    @Request() context: Context,
     @Body() requestBody: CreateProductRequest,
   ): Promise<Product> {
-    const decodedPayload = jwt.decode(authorizationToken) as TokenPayload;
+    const { userId } = context.user;
 
-    const productResponse = await ProductService.createProductService(decodedPayload.userId, requestBody);
+    const productResponse = await ProductService.createProductService(userId, requestBody);
     return productResponse;
   }
 

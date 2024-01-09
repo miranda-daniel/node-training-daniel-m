@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { router } from './routes';
 import { RegisterRoutes } from '../build/routes';
+import { ENV_VARIABLES } from './config/config';
 import dotenv from 'dotenv';
 const app = express();
 
@@ -18,6 +19,6 @@ RegisterRoutes(app);
 
 dotenv.config();
 
-app.listen(3001, () => {
-  console.log('Listening on port', 3001);
+app.listen(ENV_VARIABLES.port, () => {
+  console.log('Listening on port', ENV_VARIABLES.port);
 });
