@@ -38,7 +38,7 @@ const seed = async () => {
       }
     });
 
-    console.log('users created!');
+    console.info('users created!');
   } catch (error) {
     console.error('Error creating users:', error);
   } finally {
