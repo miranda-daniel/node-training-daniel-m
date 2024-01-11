@@ -5,7 +5,10 @@ import { router } from './routes';
 import { RegisterRoutes } from '../build/routes';
 import { ENV_VARIABLES } from './config/config';
 import dotenv from 'dotenv';
+import { errorHandler } from './middlewares/error-handler-middleware';
 const app = express();
+
+dotenv.config();
 
 app.use(cors());
 
@@ -17,7 +20,7 @@ app.use(helmet());
 app.use('/', router);
 RegisterRoutes(app);
 
-dotenv.config();
+app.use(errorHandler);
 
 app.listen(ENV_VARIABLES.port, () => {
   console.log('Listening on port', ENV_VARIABLES.port);

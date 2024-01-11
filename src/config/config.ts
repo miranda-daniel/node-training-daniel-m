@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EnvVariables } from '../types/envVariables';
+import { EnvVariables } from '../types/env-variables';
 
 const envVariablesSchema = z.object({
   PORT: z.string(),
