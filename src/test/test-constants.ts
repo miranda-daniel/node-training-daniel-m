@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { RegisterUserRequest, User, UserRaw } from '../types/user';
 import { UserSerializer } from '../serializers/user-seralizer';
-import { CreateProductRequest, ProductIndexRaw, ProductRaw } from '../types/product';
+import { CreateProductRequest, ProductIndex, ProductIndexRaw, ProductRaw, UpdateProductRequest } from '../types/product';
+import { ProductSerializer } from '../serializers/product-serializer';
 
 export const userRandomRaw: UserRaw = {
   id: faker.number.int(),
@@ -29,6 +30,8 @@ export const productRandomRaw: ProductRaw = {
   userId: faker.number.int(),
 };
 
+export const productRandom = ProductSerializer.serialize(productRandomRaw);
+
 export const productIndexRandomRaw: ProductIndexRaw = {
   id: faker.number.int(),
   title: faker.commerce.productName(),
@@ -40,7 +43,18 @@ export const productIndexRandomRaw: ProductIndexRaw = {
   },
 };
 
-export const createProductRandom: CreateProductRequest = {
+export const productIndexRandom: ProductIndex = {
+  id: faker.number.int(),
+  title: faker.commerce.productName(),
+  description: faker.commerce.productDescription(),
+  userId: faker.number.int(),
+  user: {
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+  },
+};
+
+export const productRequestRandom: CreateProductRequest | UpdateProductRequest = {
   title: faker.commerce.productName(),
   description: faker.commerce.productDescription(),
 };

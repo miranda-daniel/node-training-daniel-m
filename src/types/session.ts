@@ -16,7 +16,7 @@ export interface TokenPayload {
   userId: number;
 }
 
-export interface Context extends TokenPayload {
+export interface Context {
   user: TokenPayload & {
     token: string;
   };

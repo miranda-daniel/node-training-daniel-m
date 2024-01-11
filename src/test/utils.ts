@@ -2,7 +2,7 @@
 import { db } from '../../prisma/db';
 import { PartialProduct } from '../types/product';
 import { PartialUser } from '../types/user';
-import { createProductRandom, userRandom } from './test-constants';
+import { productRequestRandom, userRandom } from './test-constants';
 
 export const createUser = async (user: PartialUser = {}) => {
   const newUser = await db.user.create({
@@ -20,8 +20,8 @@ export const createUser = async (user: PartialUser = {}) => {
 export const createProduct = async (product: PartialProduct = {}) => {
   const newProduct = await db.product.create({
     data: {
-      title: product.title || createProductRandom.title,
-      description: product.description || createProductRandom.description,
+      title: product.title || productRequestRandom.title,
+      description: product.description || productRequestRandom.description,
       userId: product.userId || 1,
     },
   });

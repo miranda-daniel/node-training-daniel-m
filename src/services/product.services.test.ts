@@ -3,7 +3,7 @@ import { db } from '../../prisma/db';
 import { ApiError } from '../config/apiError';
 import { errors } from '../config/errors';
 import { ProductSerializer } from '../serializers/product-serializer';
-import { createProductRandom, productIndexRandomRaw, productRandomRaw } from '../test/test-constants';
+import { productRequestRandom, productIndexRandomRaw, productRandomRaw } from '../test/test-constants';
 import { createProduct, createUser } from '../test/utils';
 import { Product, ProductIndex, ProductIndexRaw, UpdateProductRequest } from '../types/product';
 import { ProductService } from './product.services';
@@ -29,12 +29,12 @@ describe('Products Service', () => {
     it('should create a product with the correct arguments', async () => {
       const createSpy = jest.spyOn(db.product, 'create');
 
-      const productResponse = await ProductService.createProductService(userId, createProductRandom);
+      const productResponse = await ProductService.createProductService(userId, productRequestRandom);
 
       expect(createSpy).toHaveBeenCalledWith({
         data: {
-          title: createProductRandom.title,
-          description: createProductRandom.description,
+          title: productRequestRandom.title,
+          description: productRequestRandom.description,
           userId,
         },
       });
@@ -60,7 +60,7 @@ describe('Products Service', () => {
     it('should throw an Error on database error', async () => {
       jest.spyOn(db.product, 'create').mockRejectedValue(new Error('Database error'));
 
-      await expect(ProductService.createProductService(userId, createProductRandom)).rejects.toThrow(
+      await expect(ProductService.createProductService(userId, productRequestRandom)).rejects.toThrow(
         new Error('Database error'),
       );
     });

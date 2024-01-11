@@ -2,7 +2,14 @@ import { db } from '../../prisma/db';
 import { ApiError } from '../config/apiError';
 import { errors } from '../config/errors';
 import { ProductSerializer } from '../serializers/product-serializer';
-import { CreateProductRequest, Product, ProductIndex, ProductIndexRaw, UpdateProductRequest } from '../types/product';
+import {
+  CreateProductRequest,
+  Product,
+  ProductIndex,
+  ProductIndexRaw,
+  ProductRaw,
+  UpdateProductRequest,
+} from '../types/product';
 
 export class ProductService {
   static getProductsService = async () => {
@@ -23,7 +30,7 @@ export class ProductService {
   static createProductService = async (userId: number, input: CreateProductRequest) => {
     const { title, description } = input;
 
-    const productCreated = await db.product.create({
+    const productCreatedRaw: ProductRaw = await db.product.create({
       data: {
         title,
         description,
@@ -31,29 +38,29 @@ export class ProductService {
       },
     });
 
-    return ProductSerializer.serialize(productCreated) as Product;
+    return ProductSerializer.serialize(productCreatedRaw) as Product;
   };
 
   static deleteProductService = async (productId: number) => {
-    const product = await db.product.findUnique({ where: { id: productId } });
+    const productRaw: ProductRaw | null = await db.product.findUnique({ where: { id: productId } });
 
-    if (!product) {
+    if (!productRaw) {
       throw new ApiError(errors.NOT_FOUND);
     }
 
-    const productDeleted = await db.product.delete({ where: { id: productId } });
+    const productDeletedRaw: ProductRaw = await db.product.delete({ where: { id: productId } });
 
-    return ProductSerializer.serialize(productDeleted) as Product;
+    return ProductSerializer.serialize(productDeletedRaw) as Product;
   };
 
   static updateProductService = async (productId: number, requestBody: UpdateProductRequest) => {
-    const product = await db.product.findUnique({ where: { id: productId } });
+    const productRaw: ProductRaw | null = await db.product.findUnique({ where: { id: productId } });
 
-    if (!product) {
+    if (!productRaw) {
       throw new ApiError(errors.NOT_FOUND);
     }
 
-    const productUpdated = await db.product.update({
+    const productUpdatedRaw: ProductRaw = await db.product.update({
       data: {
         ...requestBody,
       },
@@ -62,6 +69,6 @@ export class ProductService {
       },
     });
 
-    return ProductSerializer.serialize(productUpdated) as Product;
+    return ProductSerializer.serialize(productUpdatedRaw) as Product;
   };
 }
