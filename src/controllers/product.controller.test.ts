@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { ProductService } from '../services/product.services';
-import { productRequestRandom, productIndexRandom, productRandom } from '../test/test-constants';
+import { productRequestRandom, productIndexRandom, productRandom } from '../test/test-data-generators';
 import { ProductController } from './product.controller';
 import { Context } from '../types/session';
 import { Product } from '../types/product';

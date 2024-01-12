@@ -1,5 +1,5 @@
 import { Product } from '@prisma/client';
-import { productIndexRandomRaw, productRandomRaw } from '../test/test-constants';
+import { productIndexRandomRaw, productRandomRaw } from '../test/test-data-generators';
 import { ProductSerializer } from './product-serializer';
 import { ProductIndex } from '../types/product';
 

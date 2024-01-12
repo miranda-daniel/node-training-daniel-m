@@ -1,5 +1,5 @@
 import { db } from '../../prisma/db';
-import { userRandomRaw } from '../test/test-constants';
+import { userRandomRaw } from '../test/test-data-generators';
 import * as utils from '../helpers/utils';
 import { SessionService } from './session.services';
 import { errors } from '../config/errors';

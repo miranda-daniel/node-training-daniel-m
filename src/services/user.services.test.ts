@@ -5,7 +5,7 @@ import { createUser } from '../test/utils';
 import { UserSerializer } from '../serializers/user-seralizer';
 import { User, UserIndex } from '../types/user';
 import { errors } from '../config/errors';
-import { registerUserRandom, userRandomRaw } from '../test/test-constants';
+import { registerUserRandom, userRandomRaw } from '../test/test-data-generators';
 import * as utils from '../helpers/utils';
 
 describe('UserService', () => {
