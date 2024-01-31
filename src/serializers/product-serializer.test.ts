@@ -15,7 +15,7 @@ describe('Serializer Product', () => {
     expect(productSerialized).toEqual(ProductSerializer.serialize(productRandomRaw));
   });
 
-  it('should serialize a product list', async () => {
+  it('should serialize index view', async () => {
     const productIndexSerialized: ProductIndex[] = [
       {
         id: productIndexRandomRaw.id,

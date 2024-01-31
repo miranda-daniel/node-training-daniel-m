@@ -1,7 +1,7 @@
 // ! TODO: Rename all files. Replace "." with "-".
 import { db } from '../../prisma/db';
 import { createProduct, createUser } from '../test/test-utils';
-import { UpdateProductRequest } from '../types/product';
+import { ProductRaw } from '../types/product';
 import { ProductService } from './product.services';
 
 describe('Products Service', () => {
@@ -31,16 +31,30 @@ describe('Products Service', () => {
 
   describe('Create Product', () => {
     it('should create a product', async () => {
-      const productCreated = await createProduct({ userId });
+      const expectVerifyProductCreatedStructure = (product: ProductRaw) => {
+        expect(product).toEqual(
+          expect.objectContaining({
+            id: expect.any(Number),
+            title: expect.any(String),
+            description: expect.any(String),
+            userId,
+          }),
+        );
+      };
 
-      expect(productCreated).toEqual(
-        expect.objectContaining({
-          id: expect.any(Number),
-          title: expect.any(String),
-          userId: expect.any(Number),
-          description: expect.any(String),
-        }),
-      );
+      const initialCount = await db.product.count();
+
+      const productCreated: ProductRaw = await createProduct({ userId });
+
+      expectVerifyProductCreatedStructure(productCreated);
+
+      const newCount = await db.product.count();
+      expect(newCount).toBe(initialCount + 1);
+
+      const product: ProductRaw | null = await db.product.findUnique({ where: { id: productCreated.id } });
+      expect(product).not.toBeNull();
+
+      expectVerifyProductCreatedStructure(product as ProductRaw);
 
       await db.product.delete({ where: { id: productCreated.id } });
     });
@@ -48,28 +62,35 @@ describe('Products Service', () => {
 
   describe('Update Product', () => {
     it('should update the product', async () => {
-      const productCreated = await createProduct({ userId });
+      const expectVerifyProductEditedStructure = (product: ProductRaw) => {
+        expect(product).toEqual(
+          expect.objectContaining({
+            id,
+            title: newTitle,
+            description: newDescription,
+            userId,
+          }),
+        );
+      };
 
-      jest.spyOn(db.product, 'findUnique');
-      jest.spyOn(db.product, 'update');
+      const productCreated = await createProduct({ userId });
 
       const { id } = productCreated;
 
-      const productEdited: UpdateProductRequest = {
-        title: productCreated.title + '111',
-        description: productCreated.description + '111',
-      };
+      const newTitle = productCreated.title + '111';
+      const newDescription = productCreated.description + '111';
 
-      const productUpdated = await ProductService.updateProductService(id, productEdited);
+      const productEdited = await ProductService.updateProductService(id, {
+        title: newTitle,
+        description: newDescription,
+      });
 
-      expect(productUpdated).toEqual(
-        expect.objectContaining({
-          id: expect.any(Number),
-          title: expect.any(String),
-          userId: expect.any(Number),
-          description: expect.any(String),
-        }),
-      );
+      expectVerifyProductEditedStructure(productEdited);
+
+      const product: ProductRaw | null = await db.product.findUnique({ where: { id } });
+      expect(product).not.toBeNull();
+
+      expectVerifyProductEditedStructure(product as ProductRaw);
 
       await db.product.delete({ where: { id } });
     });
@@ -79,8 +100,7 @@ describe('Products Service', () => {
     it('should delete the product', async () => {
       const productCreated = await createProduct({ userId });
 
-      jest.spyOn(db.product, 'findUnique');
-      jest.spyOn(db.product, 'delete');
+      const initialCount = await db.product.count();
 
       const { id } = productCreated;
 
@@ -88,12 +108,19 @@ describe('Products Service', () => {
 
       expect(productDeleted).toEqual(
         expect.objectContaining({
-          id: expect.any(Number),
+          id,
           title: expect.any(String),
-          userId: expect.any(Number),
           description: expect.any(String),
+          userId,
         }),
       );
+
+      const newCount = await db.product.count();
+
+      expect(newCount).toBe(initialCount - 1);
+
+      const product: ProductRaw | null = await db.product.findUnique({ where: { id } });
+      expect(product).toBeNull();
     });
   });
 });
