@@ -1,26 +1,20 @@
 import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
 import { router } from './routes';
 import { RegisterRoutes } from '../build/routes';
 import { ENV_VARIABLES } from './config/config';
 import dotenv from 'dotenv';
-import { errorHandler } from './middlewares/error-handler-middleware';
-const app = express();
+import { postRoutesMiddleware, preRoutesMiddleware } from './middlewares/index-middlewares';
 
+const app = express();
 dotenv.config();
 
-app.use(cors());
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.use(helmet());
+preRoutesMiddleware(app);
 
 app.use('/', router);
+// TSOA generated routes
 RegisterRoutes(app);
 
-app.use(errorHandler);
+postRoutesMiddleware(app);
 
 app.listen(ENV_VARIABLES.port, () => {
   console.log('Listening on port', ENV_VARIABLES.port);
