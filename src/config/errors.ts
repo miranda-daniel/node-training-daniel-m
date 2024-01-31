@@ -34,6 +34,11 @@ export const errors = {
     errorCode: 409_000,
     description: 'User already exists',
   },
+  VALIDATION_ERROR: { // tsoa error
+    httpCode: 422,
+    errorCode: 422_000,
+    description: 'TSOA Validation error',
+  },
   INTERNAL_SERVER_ERROR: {
     httpCode: 500,
     errorCode: 500_000,

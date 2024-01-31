@@ -2,8 +2,6 @@ import { Body, Controller, Post, Route } from 'tsoa';
 import { LoginUserRequest } from '../types/session';
 import { loginValidations } from '../helpers/validations/login.validations';
 import { SessionService } from '../services/session.services';
-import { ApiError } from '../config/apiError';
-import { errors } from '../config/errors';
 
 @Route('session')
 export class SessionController extends Controller {
@@ -23,15 +21,6 @@ export class SessionController extends Controller {
       };
     }
 
-    try {
-      return await SessionService.loginUser(body);
-    } catch (err) {
-      // TODO: see how create a middleware to handle unexpected errors to avoid coding this if everywhere.
-      if (err instanceof ApiError) {
-        throw err;
-      } else {
-        throw new ApiError(errors.INTERNAL_SERVER_ERROR);
-      }
-    }
+    return await SessionService.loginUser(body);
   }
 }

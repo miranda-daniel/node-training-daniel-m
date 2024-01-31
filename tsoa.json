@@ -8,6 +8,6 @@
   },
   "routes": {
     "routesDir": "build",
-    "authenticationModule": "src/middlewares/authentication.ts"
+    "authenticationModule": "src/middlewares/authentication-middleware.ts"
   }
 }
