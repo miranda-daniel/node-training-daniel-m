@@ -9,10 +9,6 @@ import { registerUserRandom, userRandomRaw } from '../test/test-data-generators'
 import * as utils from '../helpers/utils';
 
 describe('UserService', () => {
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   describe('Get Users', () => {
     beforeEach(async () => await createUser({ email: 'test1@gmail.com' }));
 

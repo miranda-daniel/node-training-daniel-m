@@ -12,10 +12,6 @@ const mockCredentials = {
 };
 
 describe('Session Service - Login User', () => {
-  afterEach(async () => {
-    jest.restoreAllMocks();
-  });
-
   it('should sign in user created', async () => {
     await createUser({ email: mockCredentials.email });
 

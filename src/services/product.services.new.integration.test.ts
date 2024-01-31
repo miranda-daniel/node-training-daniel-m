@@ -11,17 +11,13 @@ describe('Products Service', () => {
     userId = (await createUser()).id;
   });
 
-  afterEach(async () => {
-    jest.restoreAllMocks();
-  });
-
   afterAll(async () => {
     await db.user.delete({
       where: { id: userId },
     });
   });
 
-  describe('Get Product Service', () => {
+  describe('Get Product', () => {
     it('should get an array of products', async () => {
       const productCreated = await createProduct({ userId });
 
@@ -33,7 +29,7 @@ describe('Products Service', () => {
     });
   });
 
-  describe('Create Product Service', () => {
+  describe('Create Product', () => {
     it('should create a product', async () => {
       const productCreated = await createProduct({ userId });
 

@@ -15,10 +15,6 @@ describe('Products Service', () => {
     userId = (await createUser()).id;
   });
 
-  afterEach(async () => {
-    jest.restoreAllMocks();
-  });
-
   afterAll(async () => {
     await db.user.delete({
       where: { id: userId },

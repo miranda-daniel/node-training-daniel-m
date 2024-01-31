@@ -10,7 +10,7 @@ import { ProductService } from './product.services';
 const fakeUserId = faker.number.int();
 const fakeProductId = faker.number.int();
 
-describe('Get Product Service', () => {
+describe('Get Product', () => {
   describe('Successful case', () => {
     it('should call findMany with the correct arguments', async () => {
       const createSpy = jest.spyOn(db.product, 'findMany');
@@ -47,7 +47,7 @@ describe('Get Product Service', () => {
   });
 });
 
-describe('Create Product Service', () => {
+describe('Create Product', () => {
   const createProductRequest: CreateProductRequest = {
     title: 'newTitle',
     description: ' newDescription',
@@ -88,7 +88,7 @@ describe('Create Product Service', () => {
   });
 });
 
-describe('Update Product Service', () => {
+describe('Update Product', () => {
   const productRequest: UpdateProductRequest = {
     title: 'newTitle',
     description: ' newDescription',
@@ -150,7 +150,7 @@ describe('Update Product Service', () => {
   });
 });
 
-describe('Delete Product Service', () => {
+describe('Delete Product', () => {
   describe('Successful case', () => {
     it('should call findUnique with correct arguments', async () => {
       const findUniqueSpy = jest.spyOn(db.product, 'findUnique').mockResolvedValue(productRandomRaw);
