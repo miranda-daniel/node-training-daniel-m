@@ -4,7 +4,7 @@ import * as utils from '../helpers/utils';
 import { SessionService } from './session.services';
 import { errors } from '../config/errors';
 import { ApiError } from '../config/apiError';
-import { createUser } from '../test/utils';
+import { createUser } from '../test/test-utils';
 
 const mockCredentials = {
   email: 'test1@gmail.com',

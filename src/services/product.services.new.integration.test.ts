@@ -1,5 +1,6 @@
+// ! TODO: Rename all files. Replace "." with "-".
 import { db } from '../../prisma/db';
-import { createProduct, createUser } from '../test/utils';
+import { createProduct, createUser } from '../test/test-utils';
 import { UpdateProductRequest } from '../types/product';
 import { ProductService } from './product.services';
 

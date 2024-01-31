@@ -4,7 +4,7 @@ import { ApiError } from '../config/apiError';
 import { errors } from '../config/errors';
 import { ProductSerializer } from '../serializers/product-serializer';
 import { productRequestRandom, productIndexRandomRaw, productRandomRaw } from '../test/test-data-generators';
-import { createProduct, createUser } from '../test/utils';
+import { createProduct, createUser } from '../test/test-utils';
 import { Product, ProductIndex, ProductIndexRaw, UpdateProductRequest } from '../types/product';
 import { ProductService } from './product.services';
 

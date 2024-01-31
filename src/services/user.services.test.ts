@@ -1,7 +1,7 @@
 import { db } from '../../prisma/db';
 import { ApiError } from '../config/apiError';
 import { UserService } from './user.services';
-import { createUser } from '../test/utils';
+import { createUser } from '../test/test-utils';
 import { UserSerializer } from '../serializers/user-seralizer';
 import { User, UserIndex } from '../types/user';
 import { errors } from '../config/errors';

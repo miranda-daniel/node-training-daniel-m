@@ -1,8 +1,7 @@
-// TODO: rename to test-utils.ts
 import { db } from '../../prisma/db';
 import { PartialProduct } from '../types/product';
 import { PartialUser } from '../types/user';
-import { productRequestRandom, userRandom } from './test-constants';
+import { productRequestRandom, userRandom } from './test-data-generators';
 
 export const createUser = async (user: PartialUser = {}) => {
   const newUser = await db.user.create({
