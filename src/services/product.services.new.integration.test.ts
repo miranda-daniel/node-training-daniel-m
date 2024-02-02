@@ -1,11 +1,28 @@
 // ! TODO: Rename all files. Replace "." with "-".
+import { faker } from '@faker-js/faker';
 import { db } from '../../prisma/db';
 import { createProduct, createUser } from '../test/test-utils';
-import { ProductRaw } from '../types/product';
+import { PartialProduct, ProductRaw } from '../types/product';
 import { ProductService } from './product.services';
 
 describe('Products Service', () => {
   let userId: number;
+
+  const productFake: PartialProduct = {
+    title: faker.commerce.productName(),
+    description: faker.commerce.productDescription(),
+  };
+
+  const expectVerifyFakeProductStructure = (product: ProductRaw) => {
+    expect(product).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        title: productFake.title,
+        description: productFake.description,
+        userId,
+      }),
+    );
+  };
 
   beforeAll(async () => {
     userId = (await createUser()).id;
@@ -17,7 +34,14 @@ describe('Products Service', () => {
     });
   });
 
-  describe('Get Product', () => {
+  describe('Get Products', () => {
+    it('should get an empty array of products', async () => {
+      await db.product.deleteMany();
+
+      const productsResponse = await ProductService.getProductsService();
+      expect(productsResponse).toEqual([]);
+    });
+
     it('should get an array of products', async () => {
       const productCreated = await createProduct({ userId });
 
@@ -31,30 +55,20 @@ describe('Products Service', () => {
 
   describe('Create Product', () => {
     it('should create a product', async () => {
-      const expectVerifyProductCreatedStructure = (product: ProductRaw) => {
-        expect(product).toEqual(
-          expect.objectContaining({
-            id: expect.any(Number),
-            title: expect.any(String),
-            description: expect.any(String),
-            userId,
-          }),
-        );
-      };
-
       const initialCount = await db.product.count();
 
-      const productCreated: ProductRaw = await createProduct({ userId });
+      const productCreated: ProductRaw = await createProduct({ ...productFake, userId });
 
-      expectVerifyProductCreatedStructure(productCreated);
+      expectVerifyFakeProductStructure(productCreated);
 
       const newCount = await db.product.count();
+
       expect(newCount).toBe(initialCount + 1);
 
       const product: ProductRaw | null = await db.product.findUnique({ where: { id: productCreated.id } });
       expect(product).not.toBeNull();
 
-      expectVerifyProductCreatedStructure(product as ProductRaw);
+      expectVerifyFakeProductStructure(product as ProductRaw);
 
       await db.product.delete({ where: { id: productCreated.id } });
     });
@@ -98,7 +112,7 @@ describe('Products Service', () => {
 
   describe('Delete Product', () => {
     it('should delete the product', async () => {
-      const productCreated = await createProduct({ userId });
+      const productCreated = await createProduct({ ...productFake, userId });
 
       const initialCount = await db.product.count();
 
@@ -106,14 +120,7 @@ describe('Products Service', () => {
 
       const productDeleted = await ProductService.deleteProductService(id);
 
-      expect(productDeleted).toEqual(
-        expect.objectContaining({
-          id,
-          title: expect.any(String),
-          description: expect.any(String),
-          userId,
-        }),
-      );
+      expectVerifyFakeProductStructure(productDeleted);
 
       const newCount = await db.product.count();
 
