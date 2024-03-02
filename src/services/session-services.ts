@@ -1,14 +1,16 @@
-import { db } from '../../prisma/db';
-import { ApiError } from '../config/apiError';
-import { ENV_VARIABLES } from '../config/config';
-import { errors } from '../config/errors';
-import { comparePasswords } from '../helpers/utils';
-import { Session } from '../types/session';
-import { LoginUserRequest } from '../types/session';
 import JWT from 'jsonwebtoken';
+import { db } from '@root/prisma/db';
+import { ApiError } from '@config/api-error';
+import { ENV_VARIABLES } from '@config/config';
+import { errors } from '@config/errors';
+import { comparePasswords } from '@helpers/utils';
+import { Session } from '@typing/session';
+import { LoginUserRequest } from '@typing/session';
 
 export class SessionService {
-  static loginUser = async (credentials: LoginUserRequest): Promise<Session> => {
+  static loginUser = async (
+    credentials: LoginUserRequest
+  ): Promise<Session> => {
     const jsonSignature = ENV_VARIABLES.jsonSignature;
 
     const { email, password } = credentials;
@@ -29,7 +31,9 @@ export class SessionService {
       throw new ApiError(errors.INVALID_CREDENTIALS);
     }
 
-    const tokenCreated = JWT.sign({ userId: user!.id }, jsonSignature!, { expiresIn: 3600000 });
+    const tokenCreated = JWT.sign({ userId: user!.id }, jsonSignature!, {
+      expiresIn: 3600000,
+    });
 
     return {
       errors: [],

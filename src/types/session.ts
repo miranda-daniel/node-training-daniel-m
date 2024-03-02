@@ -3,13 +3,13 @@ export interface LoginUserRequest {
   password: string;
 }
 
+export interface ErrorMessage {
+  message: string;
+}
+
 export interface Session {
   errors: ErrorMessage[];
   token: string | null;
-}
-
-export interface ErrorMessage {
-  message: string;
 }
 
 export interface TokenPayload {

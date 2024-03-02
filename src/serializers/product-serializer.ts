@@ -1,4 +1,9 @@
-import { Product, ProductIndex, ProductIndexRaw, ProductRaw } from '../types/product';
+import {
+  Product,
+  ProductIndex,
+  ProductIndexRaw,
+  ProductRaw,
+} from '@typing/product';
 import { UserSerializer } from './user-seralizer';
 
 export enum ProductsView {
@@ -7,7 +12,9 @@ export enum ProductsView {
 
 class ProductSerializer {
   static serializeProductListIndex = (productListRaw: ProductIndexRaw[]) =>
-    productListRaw.map((product: ProductIndexRaw) => ProductSerializer.serialize(product, ProductsView.ProductsIndex));
+    productListRaw.map((product: ProductIndexRaw) =>
+      ProductSerializer.serialize(product, ProductsView.ProductsIndex)
+    );
 
   static serialize = (object: object, view?: ProductsView): object => {
     switch (view) {
@@ -18,7 +25,9 @@ class ProductSerializer {
     }
   };
 
-  private static serializeProductIndex = (product: ProductIndexRaw): ProductIndex => ({
+  private static serializeProductIndex = (
+    product: ProductIndexRaw
+  ): ProductIndex => ({
     id: product.id,
     title: product.title,
     description: product.description,

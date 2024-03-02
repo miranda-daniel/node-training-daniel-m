@@ -1,7 +1,7 @@
-import { db } from '../../prisma/db';
-import { ApiError } from '../config/apiError';
-import { errors } from '../config/errors';
-import { ProductSerializer } from '../serializers/product-serializer';
+import { db } from '@root/prisma/db';
+import { ApiError } from '@config/api-error';
+import { errors } from '@config/errors';
+import { ProductSerializer } from '@serializers/product-serializer';
 import {
   CreateProductRequest,
   Product,
@@ -9,7 +9,7 @@ import {
   ProductIndexRaw,
   ProductRaw,
   UpdateProductRequest,
-} from '../types/product';
+} from '@typing/product';
 
 export class ProductService {
   static getProductsService = async () => {
@@ -24,10 +24,15 @@ export class ProductService {
       },
     });
 
-    return ProductSerializer.serializeProductListIndex(productsListRaw) as ProductIndex[];
+    return ProductSerializer.serializeProductListIndex(
+      productsListRaw
+    ) as ProductIndex[];
   };
 
-  static createProductService = async (userId: number, input: CreateProductRequest) => {
+  static createProductService = async (
+    userId: number,
+    input: CreateProductRequest
+  ) => {
     const { title, description } = input;
 
     const productCreatedRaw: ProductRaw = await db.product.create({
@@ -42,19 +47,28 @@ export class ProductService {
   };
 
   static deleteProductService = async (productId: number) => {
-    const productRaw: ProductRaw | null = await db.product.findUnique({ where: { id: productId } });
+    const productRaw: ProductRaw | null = await db.product.findUnique({
+      where: { id: productId },
+    });
 
     if (!productRaw) {
       throw new ApiError(errors.NOT_FOUND);
     }
 
-    const productDeletedRaw: ProductRaw = await db.product.delete({ where: { id: productId } });
+    const productDeletedRaw: ProductRaw = await db.product.delete({
+      where: { id: productId },
+    });
 
     return ProductSerializer.serialize(productDeletedRaw) as Product;
   };
 
-  static updateProductService = async (productId: number, requestBody: UpdateProductRequest) => {
-    const productRaw: ProductRaw | null = await db.product.findUnique({ where: { id: productId } });
+  static updateProductService = async (
+    productId: number,
+    requestBody: UpdateProductRequest
+  ) => {
+    const productRaw: ProductRaw | null = await db.product.findUnique({
+      where: { id: productId },
+    });
 
     if (!productRaw) {
       throw new ApiError(errors.NOT_FOUND);

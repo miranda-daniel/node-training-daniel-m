@@ -1,7 +1,23 @@
-import { Body, Controller, Delete, Get, Request, Path, Post, Put, Route, Security } from 'tsoa';
-import { ProductService } from '../services/product.services';
-import { CreateProductRequest, Product, ProductIndex, UpdateProductRequest } from '../types/product';
-import { Context } from '../types/session';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Request,
+  Path,
+  Post,
+  Put,
+  Route,
+  Security,
+} from 'tsoa';
+import { ProductService } from '@services/product-services';
+import {
+  CreateProductRequest,
+  Product,
+  ProductIndex,
+  UpdateProductRequest,
+} from '@typing/product';
+import { Context } from '@typing/session';
 
 @Route('products')
 export class ProductController extends Controller {
@@ -26,11 +42,14 @@ export class ProductController extends Controller {
   @Security('jwt')
   public async createProduct(
     @Request() context: Context,
-    @Body() requestBody: CreateProductRequest,
+    @Body() requestBody: CreateProductRequest
   ): Promise<Product> {
     const { userId } = context.user;
 
-    const productResponse = await ProductService.createProductService(userId, requestBody);
+    const productResponse = await ProductService.createProductService(
+      userId,
+      requestBody
+    );
     return productResponse;
   }
 
@@ -42,7 +61,8 @@ export class ProductController extends Controller {
   @Delete('/{productId}')
   @Security('jwt')
   public async deleteProduct(@Path() productId: number): Promise<Product> {
-    const productResponse = await ProductService.deleteProductService(productId);
+    const productResponse =
+      await ProductService.deleteProductService(productId);
     return productResponse;
   }
 
@@ -53,8 +73,14 @@ export class ProductController extends Controller {
    */
   @Put('/{productId}')
   @Security('jwt')
-  public async updateProduct(@Path() productId: number, @Body() requestBody: UpdateProductRequest): Promise<Product> {
-    const productResponse = await ProductService.updateProductService(productId, requestBody);
+  public async updateProduct(
+    @Path() productId: number,
+    @Body() requestBody: UpdateProductRequest
+  ): Promise<Product> {
+    const productResponse = await ProductService.updateProductService(
+      productId,
+      requestBody
+    );
     return productResponse;
   }
 }

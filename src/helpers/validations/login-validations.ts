@@ -1,8 +1,10 @@
 import validator from 'validator';
-import { LoginUserRequest } from '../../types/user';
-import { ErrorMessage } from '../../types/session';
+import { LoginUserRequest } from '@typing/session';
+import { ErrorMessage } from '@typing/session';
 
-export const loginValidations = (credentials: LoginUserRequest): ErrorMessage[] => {
+export const loginValidations = (
+  credentials: LoginUserRequest
+): ErrorMessage[] => {
   const errors: ErrorMessage[] = [];
 
   const { email, password } = credentials;

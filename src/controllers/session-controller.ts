@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Route } from 'tsoa';
-import { LoginUserRequest } from '../types/session';
-import { loginValidations } from '../helpers/validations/login.validations';
-import { SessionService } from '../services/session.services';
+import { SessionService } from '@services/session-services';
+import { loginValidations } from '@helpers/validations/login-validations';
+import { LoginUserRequest } from '@typing/session';
 
 @Route('session')
 export class SessionController extends Controller {

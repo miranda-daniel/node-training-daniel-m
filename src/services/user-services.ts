@@ -1,9 +1,9 @@
-import { db } from '../../prisma/db';
-import { ApiError } from '../config/apiError';
-import { errors } from '../config/errors';
-import { hashPassword } from '../helpers/utils';
-import { UserSerializer } from '../serializers/user-seralizer';
-import { RegisterUserRequest, User, UserIndex, UserRaw } from '../types/user';
+import { db } from '@root/prisma/db';
+import { ApiError } from '@config/api-error';
+import { errors } from '@config/errors';
+import { hashPassword } from '@helpers/utils';
+import { UserSerializer } from '@serializers/user-seralizer';
+import { RegisterUserRequest, User, UserIndex, UserRaw } from '@typing/user';
 
 export class UserService {
   static getUsersService = async () => {

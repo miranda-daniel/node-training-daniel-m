@@ -6,6 +6,110 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"UserIndex": {
+				"properties": {
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"firstName",
+					"lastName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProductIndex": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserIndex"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"description",
+					"userId",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Product": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"description",
+					"userId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateProductRequest": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"description"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateProductRequest": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"description"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ErrorMessage": {
 				"properties": {
 					"message": {
@@ -18,7 +122,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"SessionType": {
+			"Session": {
 				"properties": {
 					"errors": {
 						"items": {
@@ -38,31 +142,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"RegisterUserRequestType": {
-				"properties": {
-					"email": {
-						"type": "string"
-					},
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"email",
-					"firstName",
-					"lastName",
-					"password"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"LoginUserRequestType": {
+			"LoginUserRequest": {
 				"properties": {
 					"email": {
 						"type": "string"
@@ -78,27 +158,51 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"UserType": {
+			"User": {
 				"properties": {
-					"email": {
-						"type": "string"
-					},
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
 					"id": {
 						"type": "number",
 						"format": "double"
+					},
+					"email": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"email",
+					"firstName",
+					"lastName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterUserRequest": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
 					}
 				},
 				"required": [
 					"email",
 					"firstName",
 					"lastName",
-					"id"
+					"password"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -107,7 +211,7 @@
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "node-project",
+		"title": "training-node",
 		"version": "1.0.0",
 		"license": {
 			"name": "ISC"
@@ -116,38 +220,148 @@
 	},
 	"openapi": "3.0.0",
 	"paths": {
-		"/users/register": {
-			"post": {
-				"operationId": "Register",
+		"/products": {
+			"get": {
+				"operationId": "GetAllProducts",
 				"responses": {
 					"200": {
-						"description": "200 - Token",
+						"description": "200 - List of products",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/SessionType"
+									"items": {
+										"$ref": "#/components/schemas/ProductIndex"
+									},
+									"type": "array"
 								}
 							}
 						}
 					}
 				},
-				"description": "Register User.",
-				"summary": "Register new user in database.",
-				"security": [],
+				"description": "Get Products.",
+				"summary": "Get all products.",
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/products/create": {
+			"post": {
+				"operationId": "CreateProduct",
+				"responses": {
+					"200": {
+						"description": "200 - Product",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Product"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create Product.",
+				"summary": "Create new product in database",
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/RegisterUserRequestType"
+								"$ref": "#/components/schemas/CreateProductRequest"
 							}
 						}
 					}
 				}
 			}
 		},
-		"/users/login": {
+		"/products/{productId}": {
+			"delete": {
+				"operationId": "DeleteProduct",
+				"responses": {
+					"200": {
+						"description": "200 - Product",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Product"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete Product.",
+				"summary": "Delete product from database",
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "productId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateProduct",
+				"responses": {
+					"200": {
+						"description": "200 - Product",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Product"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update Product.",
+				"summary": "Update product from database",
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "productId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateProductRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/session/login": {
 			"post": {
 				"operationId": "Login",
 				"responses": {
@@ -156,7 +370,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/SessionType"
+									"$ref": "#/components/schemas/Session"
 								}
 							}
 						}
@@ -171,7 +385,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/LoginUserRequestType"
+								"$ref": "#/components/schemas/LoginUserRequest"
 							}
 						}
 					}
@@ -179,6 +393,45 @@
 			}
 		},
 		"/users": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"200": {
+						"description": "200 - User",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/User"
+										},
+										{
+											"items": {
+												"$ref": "#/components/schemas/ErrorMessage"
+											},
+											"type": "array"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"description": "Register User.",
+				"summary": "Register new user in database.",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterUserRequest"
+							}
+						}
+					}
+				}
+			},
 			"get": {
 				"operationId": "GetAllUsers",
 				"responses": {
@@ -188,7 +441,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/UserType"
+										"$ref": "#/components/schemas/UserIndex"
 									},
 									"type": "array"
 								}
@@ -196,7 +449,7 @@
 						}
 					}
 				},
-				"description": "Get all users.",
+				"description": "Index - Get all users.",
 				"summary": "Get a list of all users.",
 				"security": [
 					{

@@ -1,12 +1,13 @@
 import { z } from 'zod';
-import { EnvVariables } from '../types/env-variables';
+import { EnvVariables } from '@typing/env-variables';
 
-const envVariablesSchema = z.object({
-  PORT: z.string(),
-  DATABASE_URL: z.string(),
-  JSON_SIGNATURE: z.string(),
-})
-.passthrough();
+const envVariablesSchema = z
+  .object({
+    PORT: z.string(),
+    DATABASE_URL: z.string(),
+    JSON_SIGNATURE: z.string(),
+  })
+  .passthrough();
 
 const envVars = envVariablesSchema.parse(process.env);
 

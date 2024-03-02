@@ -1,12 +1,16 @@
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-import { ApiError } from '../config/apiError';
-import { errors } from '../config/errors';
-import { ENV_VARIABLES } from '../config/config';
-import { TokenPayload } from '../types/session';
+import { ApiError } from '@config/api-error';
+import { errors } from '@config/errors';
+import { ENV_VARIABLES } from '@config/config';
+import { TokenPayload } from '@typing/session';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function expressAuthentication(request: Request, securityName: string, scopes?: string[]) {
+export async function expressAuthentication(
+  request: Request,
+  securityName: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  scopes?: string[]
+) {
   const jsonSignature = ENV_VARIABLES.jsonSignature;
 
   if (securityName === 'jwt') {

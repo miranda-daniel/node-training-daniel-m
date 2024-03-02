@@ -1,4 +1,4 @@
-import { ErrorInterface } from "../types/error";
+import { ErrorInterface } from '@typing/error';
 
 export class ApiError extends Error {
   httpCode;

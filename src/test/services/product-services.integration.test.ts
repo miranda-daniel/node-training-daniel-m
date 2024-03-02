@@ -1,9 +1,8 @@
-// ! TODO: Rename all files. Replace "." with "-".
 import { faker } from '@faker-js/faker';
-import { db } from '../../prisma/db';
-import { createProduct, createUser } from '../test/test-utils';
-import { PartialProduct, ProductRaw } from '../types/product';
-import { ProductService } from './product.services';
+import { db } from '@root/prisma/db';
+import { createProduct, createUser } from '@test/helpers/utils';
+import { ProductService } from '@services/product-services';
+import { PartialProduct, ProductRaw } from '@typing/product';
 
 describe('Products Service', () => {
   let userId: number;
@@ -20,7 +19,7 @@ describe('Products Service', () => {
         title: productFake.title,
         description: productFake.description,
         userId,
-      }),
+      })
     );
   };
 
@@ -57,7 +56,10 @@ describe('Products Service', () => {
     it('should create a product', async () => {
       const initialCount = await db.product.count();
 
-      const productCreated: ProductRaw = await createProduct({ ...productFake, userId });
+      const productCreated: ProductRaw = await createProduct({
+        ...productFake,
+        userId,
+      });
 
       expectVerifyFakeProductStructure(productCreated);
 
@@ -65,7 +67,9 @@ describe('Products Service', () => {
 
       expect(newCount).toBe(initialCount + 1);
 
-      const product: ProductRaw | null = await db.product.findUnique({ where: { id: productCreated.id } });
+      const product: ProductRaw | null = await db.product.findUnique({
+        where: { id: productCreated.id },
+      });
       expect(product).not.toBeNull();
 
       expectVerifyFakeProductStructure(product as ProductRaw);
@@ -76,6 +80,13 @@ describe('Products Service', () => {
 
   describe('Update Product', () => {
     it('should update the product', async () => {
+      const productCreated = await createProduct({ userId });
+
+      const { id } = productCreated;
+
+      const newTitle = productCreated.title + '111';
+      const newDescription = productCreated.description + '111';
+
       const expectVerifyProductEditedStructure = (product: ProductRaw) => {
         expect(product).toEqual(
           expect.objectContaining({
@@ -83,16 +94,9 @@ describe('Products Service', () => {
             title: newTitle,
             description: newDescription,
             userId,
-          }),
+          })
         );
       };
-
-      const productCreated = await createProduct({ userId });
-
-      const { id } = productCreated;
-
-      const newTitle = productCreated.title + '111';
-      const newDescription = productCreated.description + '111';
 
       const productEdited = await ProductService.updateProductService(id, {
         title: newTitle,
@@ -101,7 +105,9 @@ describe('Products Service', () => {
 
       expectVerifyProductEditedStructure(productEdited);
 
-      const product: ProductRaw | null = await db.product.findUnique({ where: { id } });
+      const product: ProductRaw | null = await db.product.findUnique({
+        where: { id },
+      });
       expect(product).not.toBeNull();
 
       expectVerifyProductEditedStructure(product as ProductRaw);
@@ -126,7 +132,9 @@ describe('Products Service', () => {
 
       expect(newCount).toBe(initialCount - 1);
 
-      const product: ProductRaw | null = await db.product.findUnique({ where: { id } });
+      const product: ProductRaw | null = await db.product.findUnique({
+        where: { id },
+      });
       expect(product).toBeNull();
     });
   });

@@ -1,7 +1,10 @@
 import { Product } from '@prisma/client';
-import { productIndexRandomRaw, productRandomRaw } from '../test/test-data-generators';
-import { ProductSerializer } from './product-serializer';
-import { ProductIndex } from '../types/product';
+import {
+  productIndexRandomRaw,
+  productRandomRaw,
+} from '@test/helpers/data-generators';
+import { ProductSerializer } from '@serializers/product-serializer';
+import { ProductIndex } from '@typing/product';
 
 describe('Serializer Product', () => {
   it('should serialize a product response', async () => {
@@ -12,7 +15,9 @@ describe('Serializer Product', () => {
       userId: productRandomRaw.userId,
     };
 
-    expect(productSerialized).toEqual(ProductSerializer.serialize(productRandomRaw));
+    expect(productSerialized).toEqual(
+      ProductSerializer.serialize(productRandomRaw)
+    );
   });
 
   it('should serialize index view', async () => {
@@ -29,6 +34,8 @@ describe('Serializer Product', () => {
       },
     ];
 
-    expect(productIndexSerialized).toEqual(ProductSerializer.serializeProductListIndex([productIndexRandomRaw]));
+    expect(productIndexSerialized).toEqual(
+      ProductSerializer.serializeProductListIndex([productIndexRandomRaw])
+    );
   });
 });

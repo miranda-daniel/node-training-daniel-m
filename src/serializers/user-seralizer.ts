@@ -1,4 +1,4 @@
-import { User, UserIndex, UserIndexRaw, UserRaw } from '../types/user';
+import { User, UserIndex, UserIndexRaw, UserRaw } from '@typing/user';
 
 enum UsersView {
   UsersIndex = 'usersIndex',
@@ -6,7 +6,9 @@ enum UsersView {
 
 class UserSerializer {
   static serializeUserListIndex = (userListRaw: UserRaw[]) =>
-  userListRaw.map((user: UserRaw) => UserSerializer.serialize(user, UsersView.UsersIndex));
+    userListRaw.map((user: UserRaw) =>
+      UserSerializer.serialize(user, UsersView.UsersIndex)
+    );
 
   static serialize = (userObject: UserRaw, view?: string): object => {
     switch (view) {

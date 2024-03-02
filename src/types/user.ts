@@ -15,11 +15,6 @@ export interface User {
   lastName: string;
 }
 
-export interface LoginUserRequest {
-  email: string;
-  password: string;
-}
-
 export interface RegisterUserRequest extends Omit<User, 'id'> {
   password: string;
 }

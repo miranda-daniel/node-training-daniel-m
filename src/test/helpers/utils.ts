@@ -1,7 +1,7 @@
-import { db } from '../../prisma/db';
-import { PartialProduct } from '../types/product';
-import { PartialUser } from '../types/user';
-import { productRequestRandom, userRandom } from './test-data-generators';
+import { db } from '@root/prisma/db';
+import { productRequestRandom, userRandom } from './data-generators';
+import { PartialProduct } from '@typing/product';
+import { PartialUser } from '@typing/user';
 
 export const createUser = async (user: PartialUser = {}) => {
   const newUser = await db.user.create({
