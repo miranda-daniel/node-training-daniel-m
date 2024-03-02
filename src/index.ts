@@ -17,5 +17,5 @@ RegisterRoutes(app);
 postRoutesMiddleware(app);
 
 app.listen(ENV_VARIABLES.port, () => {
-  console.log('Listening on port', ENV_VARIABLES.port);
+  console.info('Listening on port', ENV_VARIABLES.port);
 });
