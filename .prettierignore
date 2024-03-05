@@ -1,7 +1,8 @@
-.gitignore
+build/
+node_modules/
+coverage/
 
-build
-node_modules
+.gitignore
 package.json
 package-lock.json
 
