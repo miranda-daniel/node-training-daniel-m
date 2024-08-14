@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+# Ejecuta este flujo de trabajo en cada pull request hacia la rama main
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint and Prettier check code
+    runs-on: ubuntu-latest
+
+    steps:
+      # Clona el código fuente del repositorio en el entorno de ejecución (checkout)
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Configura el entorno de Node.js en el runner
+      - name: Set up Node.js 20.11.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.11.0
+
+      # Instala dependencias
+      - name: Install dependencies
+        run: npm install
+
+      # Corre el script "lint" y "prettier"
+      - name: Lint & Prettier checks
+        run: |
+          npm run lint
+          npm run prettier

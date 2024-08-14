@@ -61,6 +61,7 @@ export class ProductController extends Controller {
   @Delete('/{productId}')
   @Security('jwt')
   public async deleteProduct(@Path() productId: number): Promise<Product> {
+    // Add spaces to test prettier github action
     const productResponse =
       await ProductService.deleteProductService(productId);
     return productResponse;
