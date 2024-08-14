@@ -73,12 +73,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 'Lint-staged is disabled'"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
     "*.ts": [
-      "npm run lint-fix"
+      "echo 'Lint-staged deshabilitado temporalmente'"
     ]
   }
 }
