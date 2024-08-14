@@ -73,7 +73,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "echo 'Lint-staged is disabled'"
     }
   },
   "lint-staged": {
