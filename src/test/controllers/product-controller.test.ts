@@ -24,9 +24,7 @@ describe('ProductController', () => {
 
       const response = await controller.getAllProducts();
 
-      // ! NOTE: To force the tests to fail
-      // expect(ProductService.getProductsService).toHaveBeenCalled()
-      expect(ProductService.getProductsService).toHaveBeenCalledTimes(2);
+      expect(ProductService.getProductsService).toHaveBeenCalled();
       expect(response).toEqual([productIndexRandom]);
     });
   });
