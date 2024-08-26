@@ -63,7 +63,7 @@ export class ProductController extends Controller {
   public async deleteProduct(@Path() productId: number): Promise<Product> {
     // Add spaces to test prettier github action
     const productResponse =
-            await ProductService.deleteProductService(productId);
+      await ProductService.deleteProductService(productId);
     return productResponse;
   }
 

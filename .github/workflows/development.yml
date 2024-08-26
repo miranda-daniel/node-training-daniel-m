@@ -29,5 +29,5 @@ jobs:
       # Corre el script "lint" y "prettier"
       - name: Lint & Prettier checks
         run: |
+          npm run test
           npm run lint
-          npm run prettier
