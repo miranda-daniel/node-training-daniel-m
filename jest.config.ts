@@ -8,7 +8,7 @@ const config: Config.InitialOptions = {
   roots: ['<rootDir>/src'],
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   setupFilesAfterEnv: ['<rootDir>/src/test/jest.setup.ts'],
-  // globalTeardown: '<rootDir>/src/test/jest.teardown.ts',
+  globalTeardown: '<rootDir>/src/test/jest.teardown.ts',
   moduleNameMapper: {
     '^@config/(.*)$': '<rootDir>/src/config/$1',
     '^@controllers/(.*)$': '<rootDir>/src/controllers/$1',
