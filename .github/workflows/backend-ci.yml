@@ -80,4 +80,4 @@ jobs:
 
       # Run integration tests
       - name: Run Integration Tests
-        run: TEST_ENV=integration npm test -- --testPathPattern=integration
+        run: TEST_ENV=integration npm test -- --testPathPattern="\\.integration\\.test\\.ts$"
