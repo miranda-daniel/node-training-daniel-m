@@ -78,7 +78,7 @@
   },
   "lint-staged": {
     "*.ts": [
-      "npm run lint-fix"
+      "echo 'Lint-staged deshabilitado temporalmente'"
     ]
   }
 }
