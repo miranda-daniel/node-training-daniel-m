@@ -9,20 +9,28 @@ jobs:
     name: Lint, Prettier Check, and Unit Tests
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [20.11.0]
+
     steps:
       # Clone the source code from the repository into the runtime environment (checkout)
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # Config environment
-      - name: Set up Node.js 20.11.0
-        uses: actions/setup-node@v3
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          node-version: 20.11.0
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: "./package.json"
 
       # Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm i --legacy-peer-deps
 
       # Check lint and prettier
       - name: Lint & Prettier checks
@@ -78,6 +86,7 @@ jobs:
       - name: Run Prisma migrations
         run: npx prisma migrate deploy
 
+      #TODO: Quizas convenga que haga 2 scripts diferentes en package.json donde defino las regex y aca correr los 2 comandos por separado para unit esrt y el otro para integration.
       # Run integration tests
       - name: Run Integration Tests
-        run: TEST_ENV=integration npm test -- --testMatch="**/?(*.)+(integration).test.ts"
+        run: TEST_ENV=integration npm test -- --testPathPattern=".*\\.integration\\.test\\.ts$"
