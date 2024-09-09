@@ -5,44 +5,13 @@ on:
   push:
 
 jobs:
-  lint-and-unit-tests:
-    name: Lint, Prettier Check, and Unit Tests
+  lint-and-tests:
+    name: Lint, Prettier Check, Unit and Integration Tests
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [20.11.0]
-
-    steps:
-      # Clone the source code from the repository into the runtime environment (checkout)
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      # Config environment
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
-          cache-dependency-path: "./package.json"
-
-      # Install dependencies
-      - name: Install dependencies
-        run: npm i --legacy-peer-deps
-
-      # Check lint and prettier
-      - name: Lint & Prettier checks
-        run: npm run lint
-
-      # Run unit tests
-      - name: Run Unit Tests
-        run: npm test -- --testPathIgnorePatterns=integration
-
-  integration-tests:
-    name: Check Integration Tests
-    runs-on: ubuntu-latest
 
     services:
       postgres:
@@ -62,13 +31,25 @@ jobs:
     steps:
       # Clone the source code from the repository into the runtime environment (checkout)
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      # Config environment
-      - name: Set up Node.js 20.11.0
-        uses: actions/setup-node@v3
+        uses: actions/checkout@v4
         with:
-          node-version: 20.11.0
+          fetch-depth: 0
+
+      # Set up Node.js
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: "./package.json"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm i --legacy-peer-deps
+
+      # Lint and Prettier check
+      - name: Lint & Prettier checks
+        run: npm run lint
 
       # Wait for the database service to be healthy
       - name: Wait for PostgreSQL to be ready
@@ -78,15 +59,10 @@ jobs:
       - name: Set up database URL
         run: echo "DATABASE_URL=postgresql://user:password@localhost:5432/test_db?schema=public" >> $GITHUB_ENV
 
-      # Install dependencies
-      - name: Install dependencies
-        run: npm install
-
-      # Run migrations or reset the database if needed
+      # Run Prisma migrations
       - name: Run Prisma migrations
         run: npx prisma migrate deploy
 
-      #TODO: Quizas convenga que haga 2 scripts diferentes en package.json donde defino las regex y aca correr los 2 comandos por separado para unit esrt y el otro para integration.
-      # Run integration tests
-      - name: Run Integration Tests
-        run: TEST_ENV=integration npm test -- --testPathPattern=".*\\.integration\\.test\\.ts$"
+      # Run Unit and Integration Tests
+      - name: Run Unit and Integration Tests
+        run: npm test
