@@ -38,7 +38,8 @@ describe('Products Service', () => {
       await db.product.deleteMany();
 
       const productsResponse = await ProductService.getProductsService();
-      expect(productsResponse).toEqual([]);
+      // Force test to fail
+      expect(productsResponse).toEqual(['random']);
     });
 
     it('should get an array of products', async () => {
